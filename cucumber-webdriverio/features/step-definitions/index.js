@@ -32,8 +32,14 @@ defineSupportCode(({Given, When, Then}) => {
   });
 
   Then('I expect to see {string}', error => {
-    browser.waitForVisible('.aviso.alert.alert-danger', 5000);
-    var alertText = browser.element('.aviso.alert.alert-danger').getText();
-    expect(alertText).to.include(error);
+      browser.waitForVisible('.aviso.alert.alert-danger', 5000);
+      var alertText = browser.element('.aviso.alert.alert-danger').getText();
+      expect(alertText).to.include(error);
   });
+
+  Then('I expect to see user icon',() => {
+    browser.waitForVisible('#cuenta', 5000);
+    browser.element('#cuenta').click();
   });
+
+});
