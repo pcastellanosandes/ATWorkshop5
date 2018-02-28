@@ -15,7 +15,7 @@ defineSupportCode(({Given, When, Then}) => {
   });
 
   When(/^I fill with (.*) and (.*)$/ , (email, password) => {
-     var cajaLogIn = browser.element('.cajaLogIn');
+    var cajaLogIn = browser.element('.cajaLogIn');
 
     var mailInput = cajaLogIn.element('input[name="correo"]');
     mailInput.click();
@@ -31,6 +31,35 @@ defineSupportCode(({Given, When, Then}) => {
     cajaLogIn.element('button=Ingresar').click()
   });
 
+  When(/^Fill with (.*), (.*), (.*), (.*) and (.*)$/ , (firstname, lastname, email, password, degree) => {
+    var cajaSignUp = browser.element('.cajaSignUp');
+    var nameInput = cajaSignUp.element('input[name="nombre"]');
+    nameInput.click();
+    nameInput.keys(firstname);
+
+    var lastNameInput = cajaSignUp.element('input[name="apellido"]');
+    lastNameInput.click();
+    lastNameInput.keys(lastname);
+
+    var mailInput = cajaSignUp.element('input[name="correo"]');
+    mailInput.click();
+    mailInput.keys(email);
+
+    var passwordInput = cajaSignUp.element('input[name="password"]');
+    passwordInput.click();
+    passwordInput.keys(password);
+
+    cajaSignUp.element('select[name="idPrograma"]').selectByValue(degree);
+  });
+
+  Then('I try to create an account {string}' , agreeTerms => {
+    var cajaSignUp = browser.element('.cajaSignUp');
+    if(agreeTerms=="true")
+      cajaSignUp.element('input[name="acepta"]').click();
+
+    browser.click('button=Registrarse');
+  });
+
   Then('I expect to see {string}', error => {
       browser.waitForVisible('.aviso.alert.alert-danger', 5000);
       var alertText = browser.element('.aviso.alert.alert-danger').getText();
@@ -40,6 +69,22 @@ defineSupportCode(({Given, When, Then}) => {
   Then('I expect to see user icon',() => {
     browser.waitForVisible('#cuenta', 5000);
     browser.element('#cuenta').click();
+  });
+
+  Then('I will see the alert {string}', message => {
+    browser.waitForVisible('.sweet-alert', 5000);
+    var alert = browser.element('//*[@id="__next"]/div/div/div[1]/div/div/div[2]/div[2]/div').getText()
+    expect(alert).to.include(message);
+  });
+
+  Then('I will see validate {string}', message => {
+    var alert = browser.element('div[role="alert"]').getText()
+    expect(alert).to.include(message);
+  });
+
+  Then(/^The css (.*) has to be red$/, xpath => {
+    var alert = browser.element(xpath)
+    expect(alert).to.have.class('has-error');
   });
 
 });
