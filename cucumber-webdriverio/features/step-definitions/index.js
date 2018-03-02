@@ -82,9 +82,16 @@ defineSupportCode(({Given, When, Then}) => {
     expect(alert).to.include(message);
   });
 
-  Then(/^The css (.*) has to be red$/, xpath => {
-    var alert = browser.element(xpath)
-    expect(alert).to.have.class('has-error');
+  Then(/^The css (.*) has to be red$/, controlName => {
+    var control;
+    if(controlName == "name"){
+        control = browser.element('/html/body/div[3]/div[2]/div/div/div/div/div/div[1]/div/form/fieldset[1]/div');
+    }else if(controlName == "lastname"){
+      control = browser.element('/html/body/div[3]/div[2]/div/div/div/div/div/div[1]/div/form/fieldset[2]/div');
+    }else if(controlName == "degree"){
+      control = browser.element('/html/body/div[3]/div[2]/div/div/div/div/div/div[1]/div/form/div/fieldset[1]');
+    }
+     control.waitForVisible('.has-error', 1000);
   });
 
 });
